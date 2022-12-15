@@ -69,7 +69,8 @@ namespace PatientAppServe.Controllers
             if (patient != null)
             {
                 patient.Diagnosis = model.Diagnosis;
-                patient.Medications = model.Radiology;
+                patient.Medications = model.Medications;
+                patient.Radiology = model.Radiology;
                 patient.LabTest = model.LabTest;
                 patient.Remarks = model.Remarks;
                 patient.Status = "Payment Pending";
