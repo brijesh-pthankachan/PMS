@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using PatientsAppServer.Models;
 
 namespace PatientAppServe.Models.ViewModels;
 
@@ -19,7 +18,7 @@ public class DoctorRegisterModel
 
     [Required] public string Gender { get; set; }
 
-    [Required] [StringLength(200)] public string Qualification { get; set; }
+    [Required][StringLength(200)] public string Qualification { get; set; }
 
     [Required] public string Experience { get; set; }
 

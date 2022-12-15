@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PatientAppServe.Models;
@@ -40,11 +35,11 @@ namespace PatientAppServe.Controllers
             return doctor;
         }
 
-        
-        [HttpPut("{id}")]
+
+        [HttpPut]
         public async Task<IActionResult> PutDoctor(Doctor model)
         {
-            var existingDoctor = await _context.Doctors.FindAsync(model.Id);
+            var existingDoctor = await _context.Doctors.FindAsync(model.DoctorId);
 
             if (existingDoctor != null)
             {
@@ -54,14 +49,14 @@ namespace PatientAppServe.Controllers
                 existingDoctor.Qualification = model.Qualification;
                 existingDoctor.Experience = model.Experience;
             }
-            
+
             await _context.SaveChangesAsync();
             return Ok();
         }
-        
-     
-  
 
-       
+
+
+
+
     }
 }
