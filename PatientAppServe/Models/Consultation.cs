@@ -26,7 +26,6 @@ namespace PatientAppServe.Models
         public string Medications { get; set; }
         public string Radiology { get; set; }
         public string LabTest { get; set; }
-        public string MedicineDuration { get; set; }
         public string Remarks { get; set; }
         [Required]
         public string ConsultationMode { get; set; }

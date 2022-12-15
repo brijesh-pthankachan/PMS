@@ -29,8 +29,6 @@ public class RegisterViewModel
     [MaxLength(25)]
     public string Place { get; set; }
     [Required]
-    [MaxLength(6)]
-    [MinLength(6)]
     public int Pincode { get; set; }
     [Required]
     [MaxLength(10)]
@@ -38,9 +36,6 @@ public class RegisterViewModel
     public string EmergencyContactNumber { get; set; }
     public string BloodGroup { get; set; }
     [Required]
-    [MinLength(12)]
-    [MaxLength(12)]
     public long Aadhar { get; set; }
-    [Required]
     public string Relation { get; set; }
 }
