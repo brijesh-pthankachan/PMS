@@ -31,9 +31,9 @@ namespace PatientAppServe.Models
         public string Experience { get; set; }
 
         [Required]
-        public DateOnly Dob { get; set; }
+        public DateTime Dob { get; set; }
         public bool Availability { get; set; }
-        public int? Ratting { get; set; }
+        public int? Rating { get; set; }
 
         public ApplicationUser ApplicationUsers { get; set; }
         public string Id { get; set; }
