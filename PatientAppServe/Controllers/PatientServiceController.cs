@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using PatientAppServe.Models;
 using PatientsAppServer.Data;
 using PatientsAppServer.Models;
 
@@ -57,6 +58,26 @@ namespace PatientAppServe.Controllers
             return Ok(completedConsultations);
 
         }
+
+        [HttpPost("{patientId:int}")]
+
+        public async Task<IActionResult> BookAppointment(Consultation model, int patientId)
+                {
+                    if (_db.Consultations == null) return Ok();
+                    await _db.Consultations.AddAsync(new Consultation()
+                    {
+                        Date = model.Date,
+                        Status = "Incomplete",
+                        PatientId = patientId,
+                        DoctorId = model.DoctorId,
+                        ConsultationFee = model.ConsultationFee,
+                        ConsultationMode = model.ConsultationMode,
+                        Session = model.Session
+                        
+                    });
+                    await _db.SaveChangesAsync();
+                    return Ok();
+                }
 
     }
 }
