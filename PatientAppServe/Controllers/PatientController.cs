@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PatientAppServe.Models;
-using PatientAppServe.Models.ViewModels;
 using PatientsAppServer.Data;
 using PatientsAppServer.Models;
 
@@ -34,8 +33,8 @@ namespace PatientAppServe.Controllers
         {
             return Ok(await _db.Patients.ToListAsync());
         }
-        
-        
+
+
         [HttpGet("{patientId}")]
 
         public async Task<IActionResult> Get(int patientId)
@@ -43,38 +42,15 @@ namespace PatientAppServe.Controllers
             return Ok(await _db.Patients.FindAsync(patientId));
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Post(RegisterViewModel model)
-        {
-            var newPatient = new Patient
-            {
-                Aadhar = model.Aadhar,
-                BloodGroup = model.BloodGroup,
-                Dob = model.Dob,
-                Gender = model.Gender,
-                Pincode = model.Pincode,
-                FirstName = model.FirstName,
-                Place = model.Place,
-                HouseNo = model.HouseNo,
-                LastName = model.LastName,
-                Relation = model.Relation,
-                EmergencyContactNumber = model.EmergencyContactNumber,
-                PatientPhoneNumber = _userManager.FindByEmailAsync(model.Email).Result.Id,
-                Id = _userManager.FindByEmailAsync(model.Email).Result.Id
-                
-            };
-            await _db.Patients.AddAsync(newPatient);
-            await _db.SaveChangesAsync();
-            return Ok();
-        }
-        
-    
+
+
+
 
 
         [HttpPut]
         public async Task<IActionResult> Update(Patient model)
         {
-            var existingPatient = await _db.Patients.FindAsync(model.Id);
+            var existingPatient = await _db.Patients.FindAsync(model.PatientId);
 
             if (existingPatient != null)
             {
@@ -84,12 +60,12 @@ namespace PatientAppServe.Controllers
                 existingPatient.Place = model.Place;
                 existingPatient.HouseNo = model.HouseNo;
             }
-            
+
             await _db.SaveChangesAsync();
             return Ok();
         }
-        
-        
+
+
 
     }
 }

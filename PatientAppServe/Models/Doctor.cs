@@ -22,7 +22,7 @@ public class Doctor
 
     [Required] public string Gender { get; set; }
 
-    [Required] [StringLength(200)] public string Qualification { get; set; }
+    [Required][StringLength(200)] public string Qualification { get; set; }
 
     [Required] public string Experience { get; set; }
 
@@ -30,6 +30,6 @@ public class Doctor
     public bool Availability { get; set; }
     public int? Rating { get; set; }
 
-    public ApplicationUser UserId { get; set; }
-    [ForeignKey(nameof(UserId))] public string Id { get; set; }
+    public ApplicationUser? UserId { get; set; }
+    [ForeignKey(nameof(UserId))] public string? Id { get; set; }
 }

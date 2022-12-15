@@ -5,11 +5,11 @@ namespace PatientAppServe.Models.ViewModels;
 public class RegisterViewModel
 {
     [Required] public string Email { get; set; }
-    [Required] public string Password { get; set; }
-    [Compare(nameof(Password))] public string ConfirmPassword { get; set; }
-    
-    public String Id { get; set; }
-    public string PatientPhoneNumber { get; set; }
+    public string? Password { get; set; }
+    [Compare(nameof(Password))] public string? ConfirmPassword { get; set; }
+
+    public string? Id { get; set; }
+    public string? PatientPhoneNumber { get; set; }
 
     [Required]
     [MinLength(1)]

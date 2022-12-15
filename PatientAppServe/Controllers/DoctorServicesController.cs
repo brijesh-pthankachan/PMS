@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PatientAppServe.Models;
@@ -35,12 +30,12 @@ namespace PatientAppServe.Controllers
             if (_db.Consultations == null) return Ok();
             var pendingAppointments =
                 _db.Consultations.Where(m => m.DoctorId == doctorId && m.Status == "Incomplete" && m.Date == DateTime.UtcNow.Date).ToList();
-                
+
             return Ok(pendingAppointments);
 
         }
-        
-        
+
+
         [HttpGet("{doctorId:int}")]
         public IActionResult GetParkedAppointments(int doctorId)
         {
@@ -50,8 +45,8 @@ namespace PatientAppServe.Controllers
             return Ok(parkedPatients);
 
         }
-        
-        [HttpPost("{patientId:int}") ]
+
+        [HttpPost("{patientId:int}")]
         public IActionResult GetPreviousConsultation(int patientId)
         {
             if (_db.Consultations == null) return Ok();
@@ -60,7 +55,7 @@ namespace PatientAppServe.Controllers
             return Ok(previousConsultations);
 
         }
-        
+
         [HttpPost("{appointmentId:int}")]
         public async Task<IActionResult> AddDiagnosis(Consultation model, int appointmentId)
         {
@@ -79,7 +74,7 @@ namespace PatientAppServe.Controllers
             await _db.SaveChangesAsync();
             return Ok();
         }
-        
+
         [HttpPost("{appointmentId:int}")]
         public async Task<IActionResult> ParkPatient(Consultation model, int appointmentId)
         {
@@ -97,7 +92,7 @@ namespace PatientAppServe.Controllers
             await _db.SaveChangesAsync();
             return Ok();
         }
-        
+
 
     }
 }

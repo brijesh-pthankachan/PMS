@@ -1,11 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PatientAppServe.Models;
+using PatientAppServe.Models.ViewModels;
 using PatientsAppServer.Data;
 using PatientsAppServer.Models;
 
@@ -35,11 +31,11 @@ namespace PatientAppServe.Controllers
             if (_db.Consultations == null) return Ok();
             var incompleteAppointments =
                 _db.Consultations.Where(m => m.PatientId == patientId && m.Status == "Incomplete").ToList();
-                
+
             return Ok(incompleteAppointments);
 
         }
-        
+
         [HttpGet("{id}")]
         public IActionResult GetLinkedAccounts(string id)
         {
@@ -47,14 +43,14 @@ namespace PatientAppServe.Controllers
             return Ok(linkedAccounts);
 
         }
-        
+
         [HttpGet("{patientId:int}")]
         public IActionResult GetConsultationDetails(int patientId)
         {
             if (_db.Consultations == null) return Ok();
             var completedConsultations =
                 _db.Consultations.Where(m => m.PatientId == patientId && m.Status == "Completed").ToList();
-                
+
             return Ok(completedConsultations);
 
         }
@@ -62,22 +58,47 @@ namespace PatientAppServe.Controllers
         [HttpPost("{patientId:int}")]
 
         public async Task<IActionResult> BookAppointment(Consultation model, int patientId)
-                {
-                    if (_db.Consultations == null) return Ok();
-                    await _db.Consultations.AddAsync(new Consultation()
-                    {
-                        Date = model.Date,
-                        Status = "Incomplete",
-                        PatientId = patientId,
-                        DoctorId = model.DoctorId,
-                        ConsultationFee = model.ConsultationFee,
-                        ConsultationMode = model.ConsultationMode,
-                        Session = model.Session
-                        
-                    });
-                    await _db.SaveChangesAsync();
-                    return Ok();
-                }
+        {
+            if (_db.Consultations == null) return Ok();
+            await _db.Consultations.AddAsync(new Consultation()
+            {
+                Date = model.Date,
+                Status = "Incomplete",
+                PatientId = patientId,
+                DoctorId = model.DoctorId,
+                ConsultationFee = model.ConsultationFee,
+                ConsultationMode = model.ConsultationMode,
+                Session = model.Session
+
+            });
+            await _db.SaveChangesAsync();
+            return Ok();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddAssociatedUser(RegisterViewModel model)
+        {
+            var newPatient = new Patient
+            {
+                Aadhar = model.Aadhar,
+                BloodGroup = model.BloodGroup,
+                Dob = model.Dob,
+                Gender = model.Gender,
+                Pincode = model.Pincode,
+                FirstName = model.FirstName,
+                Place = model.Place,
+                HouseNo = model.HouseNo,
+                LastName = model.LastName,
+                Relation = model.Relation,
+                EmergencyContactNumber = model.EmergencyContactNumber,
+                PatientPhoneNumber = _userManager.FindByEmailAsync(model.Email).Result.PhoneNumber,
+                Id = _userManager.FindByEmailAsync(model.Email).Result.Id
+
+            };
+            await _db.Patients.AddAsync(newPatient);
+            await _db.SaveChangesAsync();
+            return Ok();
+        }
 
     }
 }
