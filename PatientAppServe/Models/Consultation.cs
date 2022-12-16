@@ -6,9 +6,9 @@ namespace PatientAppServe.Models
     {
         [Key]
         public int AppointmentId { get; set; }
-        public Patient Patients { get; set; }
+        public Patient? Patients { get; set; }
         public int PatientId { get; set; }
-        public Doctor Doctors { get; set; }
+        public Doctor? Doctors { get; set; }
         public int DoctorId { get; set; }
 
 
@@ -22,11 +22,11 @@ namespace PatientAppServe.Models
         [Required]
         public float ConsultationFee { get; set; }
 
-        public string Diagnosis { get; set; }
-        public string Medications { get; set; }
-        public string Radiology { get; set; }
-        public string LabTest { get; set; }
-        public string Remarks { get; set; }
+        public string? Diagnosis { get; set; }
+        public string? Medications { get; set; }
+        public string? Radiology { get; set; }
+        public string? LabTest { get; set; }
+        public string? Remarks { get; set; }
         [Required]
         public string ConsultationMode { get; set; }
     }

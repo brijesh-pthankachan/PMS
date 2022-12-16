@@ -12,10 +12,10 @@ namespace PatientAppServe.Models
         [Key]
         [Required]
         public int PatientId { get; set; }
-        [Required]
-        public ApplicationUser UserId { get; set; }
+
+        public ApplicationUser? UserId { get; set; }
         [ForeignKey(nameof(UserId))]
-        public String Id { get; set; }
+        public string? Id { get; set; }
         public string PatientPhoneNumber { get; set; }
 
         [Required]
@@ -43,7 +43,7 @@ namespace PatientAppServe.Models
         public string EmergencyContactNumber { get; set; }
         public string BloodGroup { get; set; }
         [Required]
-   
+
         public long Aadhar { get; set; }
         [Required]
         public string Relation { get; set; }

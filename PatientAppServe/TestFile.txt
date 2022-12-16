@@ -68,6 +68,7 @@ GenerateData
 
 https://localhost:7296/api/Accounts/GenerateData
 
+
 Book Appointmant
 ------------------------------------------------------
 
@@ -125,3 +126,8 @@ https://localhost:7296/api/Patient/1
 
 
 
+  "consultationMode": "string"
+ "status": "string",
+
+   
+}
