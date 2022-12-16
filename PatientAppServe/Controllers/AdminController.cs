@@ -18,17 +18,17 @@ namespace PatientAppServe.Controllers
             _db = db;
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteDoctor(int id)
-        {
-            var doctor = await _db.Doctors.FindAsync(id);
-            if (doctor == null)
-                return NotFound();
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> DeleteDoctor(int id)
+        //{
+        //    var doctor = await _db.Doctors.FindAsync(id);
+        //    if (doctor == null)
+        //        return NotFound();
 
-            _db.Doctors.Remove(doctor);
-            await _db.SaveChangesAsync();
-            return Ok();
-        }
+        //    _db.Doctors.Remove(doctor);
+        //    await _db.SaveChangesAsync();
+        //    return Ok();
+        //}
 
         [HttpPut("{id}")]
         public async Task<IActionResult> PutDoctorMaster(Doctor model)
