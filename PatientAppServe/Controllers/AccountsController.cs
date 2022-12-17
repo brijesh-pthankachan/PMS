@@ -1,5 +1,9 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using PatientAppServe.Models;
 using PatientAppServe.Models.ViewModels;
 using PatientsAppServer.Data;
@@ -13,16 +17,18 @@ public class AccountsController : ControllerBase
 {
     private readonly ApplicationDbContext _db;
     private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly IConfiguration _configuration;
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly UserManager<ApplicationUser> _userManager;
 
     public AccountsController(ApplicationDbContext db, UserManager<ApplicationUser> userManager,
-        SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager)
+        SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager,IConfiguration configuration)
     {
         _db = db;
         _userManager = userManager;
         _signInManager = signInManager;
         _roleManager = roleManager;
+        _configuration = configuration;
     }
 
     [HttpPost]
@@ -114,4 +120,11 @@ public class AccountsController : ControllerBase
         return Ok("Data Generated");
     }
 
+    
+    // written for test api frontend
+    
+    
+    
+    
+    
 }
