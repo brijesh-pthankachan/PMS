@@ -63,6 +63,11 @@ https://localhost:7296/api/Accounts/newdoctor
   "confirmPassword": "Pass@123"
 }
 
+GenerateData
+-------------------------------------------------------------
+
+https://localhost:7296/api/Accounts/GenerateData
+
 
 Book Appointmant
 ------------------------------------------------------
@@ -76,6 +81,51 @@ https://localhost:7296/api/PatientService/BookAppointment/1
  "date": "2022-12-15T10:54:35.308Z",
   "session": "string",
  "consultationFee": 0,
+  "consultationMode": "string",
+ "status": "string"
+
+   
+}
+
+GetDoctor
+-------------------------------------------------------------
+
+https://localhost:7296/api/Doctor
+
+PutDoctor
+---------------------------------------------------------------
+
+https://localhost:7296/api/Doctor
+
+GetDoctor id
+
+https://localhost:7296/api/Doctor/1
+
+
+GetPatient
+----------------------------------------------------------------
+
+https://localhost:7296/api/Patient
+
+GetPatientId
+-----------------------------------------------------------------
+
+https://localhost:7296/api/Patient/1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   "consultationMode": "string"
  "status": "string",
 
