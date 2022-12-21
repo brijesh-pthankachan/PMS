@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PatientAppServe.Models;
 using PatientsAppServer.Data;
 using PatientsAppServer.Models;
@@ -29,8 +30,9 @@ namespace PatientAppServe.Controllers
         {
             if (_db.Consultations == null) return Ok();
             var pendingAppointments =
-                _db.Consultations.Where(m => m.DoctorId == doctorId && m.Status == "Incomplete" && m.Date == DateTime.UtcNow.Date).ToList();
+                _db.Consultations.Where(m => m.DoctorId == doctorId && m.Status == "Incomplete" && m.Date==DateTime.UtcNow.Date ).Include(m=>m.Patients).ToList();
 
+            
             return Ok(pendingAppointments);
 
         }
@@ -41,26 +43,26 @@ namespace PatientAppServe.Controllers
         {
             if (_db.Consultations == null) return Ok();
             var parkedPatients =
-                _db.Consultations.Where(m => m.DoctorId == doctorId && m.Status == "Parked" && m.Date == DateTime.UtcNow.Date).ToList();
+                _db.Consultations.Where(m => m.DoctorId == doctorId && m.Status == "Parked" && m.Date == DateTime.UtcNow.Date).Include(m=>m.Patients).ToList();
             return Ok(parkedPatients);
 
         }
 
-        [HttpPost("{patientId:int}")]
-        public IActionResult GetPreviousConsultation(int patientId)
+        // [HttpGet("{patientId:int}")]
+        // public IActionResult GetPreviousConsultation(int patientId)
+        // {
+        //     if (_db.Consultations == null) return Ok();
+        //     var previousConsultations =
+        //         _db.Consultations.Where(m => m.PatientId == patientId && m.Status == "Completed").ToList();
+        //     return Ok(previousConsultations);
+        //
+        // }
+
+        [HttpPut]
+        public async Task<IActionResult> AddDiagnosis(Consultation model)
         {
             if (_db.Consultations == null) return Ok();
-            var previousConsultations =
-                _db.Consultations.Where(m => m.PatientId == patientId && m.Status == "Completed").ToList();
-            return Ok(previousConsultations);
-
-        }
-
-        [HttpPost("{appointmentId:int}")]
-        public async Task<IActionResult> AddDiagnosis(Consultation model, int appointmentId)
-        {
-            if (_db.Consultations == null) return Ok();
-            var patient = await _db.Consultations.FindAsync(appointmentId);
+            var patient = await _db.Consultations.FindAsync(model.AppointmentId);
             if (patient != null)
             {
                 patient.Diagnosis = model.Diagnosis;

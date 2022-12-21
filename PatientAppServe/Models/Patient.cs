@@ -26,6 +26,8 @@ namespace PatientAppServe.Models
         [MaxLength(20)]
         public string LastName { get; set; }
         [Required]
+        
+        [Column(TypeName="date")]
         public DateTime Dob { get; set; }
         [Required]
         public string Gender { get; set; }

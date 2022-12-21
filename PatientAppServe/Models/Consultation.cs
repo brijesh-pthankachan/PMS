@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PatientAppServe.Models
 {
@@ -13,13 +14,11 @@ namespace PatientAppServe.Models
 
 
 
-        [Required]
+        [Column(TypeName="date")]
         public DateTime Date { get; set; }
-        [Required]
         public string Session { get; set; }
 
         public string Status { get; set; }
-        [Required]
         public float ConsultationFee { get; set; }
 
         public string? Diagnosis { get; set; }
@@ -27,7 +26,6 @@ namespace PatientAppServe.Models
         public string? Radiology { get; set; }
         public string? LabTest { get; set; }
         public string? Remarks { get; set; }
-        [Required]
         public string ConsultationMode { get; set; }
     }
 }

@@ -18,7 +18,7 @@ namespace PatientAppServe.Controllers
             _db = db;
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteDoctor(int id)
         {
             var doctor = await _db.Doctors.FindAsync(id);
