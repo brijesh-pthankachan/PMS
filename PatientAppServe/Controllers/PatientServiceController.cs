@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PatientAppServe.Models;
 using PatientAppServe.Models.ViewModels;
 using PatientsAppServer.Data;
@@ -30,7 +31,7 @@ namespace PatientAppServe.Controllers
         {
             if (_db.Consultations == null) return Ok();
             var incompleteAppointments =
-                _db.Consultations.Where(m => m.PatientId == patientId && m.Status == "Incomplete").ToList();
+                _db.Consultations.Where(m => m.PatientId == patientId && m.Status == "Incomplete").Include(m=>m.Doctors);
 
             return Ok(incompleteAppointments);
 
@@ -49,22 +50,22 @@ namespace PatientAppServe.Controllers
         {
             if (_db.Consultations == null) return Ok();
             var completedConsultations =
-                _db.Consultations.Where(m => m.PatientId == patientId && m.Status == "Completed").ToList();
+                _db.Consultations.Where(m => m.PatientId == patientId && m.Status == "Completed").Include(m=>m.Doctors);
 
             return Ok(completedConsultations);
 
         }
 
-        [HttpPost("{patientId:int}")]
+        [HttpPost]
 
-        public async Task<IActionResult> BookAppointment(Consultation model, int patientId)
+        public async Task<IActionResult> BookAppointment(Consultation model)
         {
             if (_db.Consultations == null) return Ok();
             await _db.Consultations.AddAsync(new Consultation()
             {
                 Date = model.Date,
                 Status = "Incomplete",
-                PatientId = patientId,
+                PatientId = model.PatientId,
                 DoctorId = model.DoctorId,
                 ConsultationFee = model.ConsultationFee,
                 ConsultationMode = model.ConsultationMode,

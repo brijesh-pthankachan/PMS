@@ -26,6 +26,7 @@ public class Doctor
 
     [Required] public string Experience { get; set; }
 
+    [Column(TypeName="date")]
     [Required] public DateTime Dob { get; set; }
     public bool Availability { get; set; }
     public int? Rating { get; set; }
