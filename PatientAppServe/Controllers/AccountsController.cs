@@ -42,7 +42,7 @@ public class AccountsController : ControllerBase
         };
 
         var result = await _userManager.CreateAsync(newPatient, model.Password);
-        if (!result.Succeeded) return NotFound();
+        if (!result.Succeeded) return Ok("Some Error Has Occured");
         await _userManager.AddToRoleAsync(newPatient, "User");
 
         await _db.Patients.AddAsync(new Patient
@@ -64,7 +64,12 @@ public class AccountsController : ControllerBase
         });
         await _db.SaveChangesAsync();
 
-        return Ok();
+        return Ok(
+            new
+            {
+                message = "done"
+
+            });
 
     }
 
@@ -78,7 +83,11 @@ public class AccountsController : ControllerBase
             PhoneNumber = model.DoctorPhoneNumber,
             UserName = Guid.NewGuid().ToString().Replace("-", "").ToLower()
         };
-        await _userManager.CreateAsync(newDoctor, model.Password);
+        var res = await _userManager.CreateAsync(newDoctor, model.Password);
+        if (!res.Succeeded)
+        {
+            return BadRequest(new { message = "Some Error Has Occured" });
+        }
         await _userManager.AddToRoleAsync(newDoctor, "Doctor");
 
         await _db.Doctors.AddAsync(new Doctor()
@@ -91,12 +100,16 @@ public class AccountsController : ControllerBase
             Id = _userManager.FindByEmailAsync(model.Email).Result.Id,
             Experience = model.Experience,
             Availability = true,
-            Qualification = model.Qualification
+            Qualification = model.Qualification,
+            Specilaization = model.Specilization
         });
 
         await _db.SaveChangesAsync();
 
-        return Ok();
+        return Ok(new
+        {
+            message = "done"
+        });
 
     }
 
@@ -121,9 +134,96 @@ public class AccountsController : ControllerBase
     }
 
     
-    // written for test api frontend
+
+    [HttpPost]
+    public async Task<IActionResult> Login(LoginModel model)
+    {
+        var user = await _userManager.FindByEmailAsync(model.Email);
+        if (user == null) return BadRequest();
+
+        var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, true);
+        if (!result.Succeeded)
+            return BadRequest(new
+            {
+                Success = false,
+                Message = "Invalid email / password."
+            });
+
+        var token = GenerateToken(user);
+
+        return Ok(new
+        {
+            Data = token,
+            Message = "Login Successful"
+        });
+    }
+
+    private string GenerateToken(ApplicationUser user)
+    {
+
+        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+        var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+        var docid = "";
+        var pid = "";
+        try
+        {
+            pid =  _db.Patients.Where(m=>m.Id == user.Id &&m.Relation=="Self").First().PatientId.ToString();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+
+        try
+        {
+            docid = _db.Doctors.Where(m=>m.Id == user.Id).First().DoctorId.ToString();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+     
+        var UUID = "";
+        
+        if (_userManager.GetRolesAsync(user).Result.First()=="Doctor")
+        {
+            UUID = docid;
+        }
+        else if(_userManager.GetRolesAsync(user).Result.First()=="User")
+        {
+            UUID = pid;
+        }
+        else if (_userManager.GetRolesAsync(user).Result.First()=="Pharma")
+        {
+            UUID = user.Id;
+        }
+        else
+        {
+            UUID = user.Id;
+        }
     
-    
+
+        //claim is used to add identity to JWT token
+        var claims = new[] {
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim(JwtRegisteredClaimNames.Sid, user.Id),
+            new Claim(JwtRegisteredClaimNames.Email, user.Email),
+            new Claim(ClaimTypes.Role,_userManager.GetRolesAsync(user).Result.First()),
+            new Claim("Date", DateTime.Now.ToString()),
+            new Claim("UUID", UUID)
+        };
+
+        var token = new JwtSecurityToken(_configuration["Jwt:Issuer"],
+            _configuration["Jwt:Audiance"],
+            claims,    //null original value
+            expires: DateTime.Now.AddMinutes(120),
+
+            //notBefore:
+            signingCredentials: credentials);
+
+        var data = new JwtSecurityTokenHandler().WriteToken(token); //return access token 
+        return data;
+    }
     
     
     

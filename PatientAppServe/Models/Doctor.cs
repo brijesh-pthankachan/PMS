@@ -20,6 +20,7 @@ public class Doctor
     [StringLength(25, MinimumLength = 1)]
     public string LastName { get; set; }
 
+    public string? Specilaization { get; set; }
     [Required] public string Gender { get; set; }
 
     [Required][StringLength(200)] public string Qualification { get; set; }

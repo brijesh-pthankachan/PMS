@@ -25,6 +25,7 @@ public class DoctorRegisterModel
     [Required] public DateTime Dob { get; set; }
     public bool Availability { get; set; }
 
+    public string Specilization { get; set; }
     [Required] public string Email { get; set; }
 
     [Required] public string Password { get; set; }

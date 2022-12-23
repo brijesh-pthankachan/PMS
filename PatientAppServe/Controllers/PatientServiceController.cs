@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +28,7 @@ namespace PatientAppServe.Controllers
         }
 
         [HttpGet("{patientId:int}")]
+        [Authorize(Roles = "User")]
         public IActionResult GetPendingAppointments(int patientId)
         {
             if (_db.Consultations == null) return Ok();
@@ -34,7 +36,6 @@ namespace PatientAppServe.Controllers
                 _db.Consultations.Where(m => m.PatientId == patientId && m.Status == "Incomplete").Include(m=>m.Doctors);
 
             return Ok(incompleteAppointments);
-
         }
 
         [HttpGet("{id}")]
@@ -57,7 +58,6 @@ namespace PatientAppServe.Controllers
         }
 
         [HttpPost]
-
         public async Task<IActionResult> BookAppointment(Consultation model)
         {
             if (_db.Consultations == null) return Ok();
